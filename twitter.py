@@ -2338,8 +2338,8 @@ class Api(object):
     parameters = {}
     if count is not None:
       try:
-        if int(count) > 100:
-          raise TwitterError("'count' may not be greater than 100")
+        if int(count) > 200:
+          raise TwitterError("'count' may not be greater than 200")
       except ValueError:
         raise TwitterError("'count' must be an integer")
       parameters['count'] = count
