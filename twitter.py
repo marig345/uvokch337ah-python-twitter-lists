@@ -2629,6 +2629,69 @@ class Api(object):
      self._CheckForTwitterError(data)
      return [Status.NewFromJsonDict(x) for x in data]
 
+  def GetListStatuses(self,
+                      tlist,
+                      since_id=None,
+                      max_id=None,
+                      per_page=None,
+                      page=None):
+    ''' Get statuses of any list 
+      
+    Args:
+      tlist:
+        Twitter List object
+      since_id:
+        Returns results with an ID greater than (that is, more recent
+        than) the specified ID. There are limits to the number of
+        Tweets which can be accessed through the API. If the limit
+        of Tweets has occured since the since_id, the since_id will
+        be forced to the oldest ID available. 
+      max_id:
+        Returns results with an ID less than (that is, older than)
+        or equal to the specified ID. 
+      per_page:
+        Specifies the number of tweets per page to retrieve. 
+      page:
+        Specifies the page of results to retrieve.
+    
+    Returns:
+      A sequence of twitter.Status instances, representing the tweets
+      on the list
+    '''
+    url = '%s/%s/lists/%i/statuses.json' % (self.base_url,
+                                            tlist.user.screen_name,
+                                            tlist.id)
+    parameters={}
+
+    if since_id:
+      try:
+        parameters['since_id'] = long(since_id)
+      except ValueError:
+        raise TwitterError("since_id must be an integer")
+    
+    if max_id:
+      try:
+        parameters['max_id'] = long(max_id)
+      except ValueError:
+        raise TwitterError("max_id must be an integer") 
+     
+    if per_page:
+      try:
+        parameters['per_page'] = int(per_page)
+      except ValueError:
+        raise TwitterError("'per_page' must be an integer")
+      
+    if page:
+      try:
+        parameters['page'] = int(page)
+      except ValueError:
+        raise TwitterError("'page' must be an integer")       
+      
+    json = self._FetchUrl(url, parameters=parameters)
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    return [Status.NewFromJsonDict(x) for x in data]
+
   def GetReplies(self, since=None, since_id=None, page=None):
     '''Get a sequence of status messages representing the 20 most
     recent replies (status updates prefixed with @twitterID) to the
