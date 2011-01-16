@@ -2692,40 +2692,18 @@ class Api(object):
     self._CheckForTwitterError(data)
     return [Status.NewFromJsonDict(x) for x in data]
 
-  def GetReplies(self, since=None, since_id=None, page=None):
-    '''Get a sequence of status messages representing the 20 most
-    recent replies (status updates prefixed with @twitterID) to the
-    authenticating user.
-
-    Args:
-      since_id:
-        Returns results with an ID greater than (that is, more recent
-        than) the specified ID. There are limits to the number of
-        Tweets which can be accessed through the API. If the limit of
-        Tweets has occured since the since_id, the since_id will be
-        forced to the oldest ID available. [Optional]
-      page:
-        Specifies the page of results to retrieve.
-        Note: there are pagination limits. [Optional]
-      since:
-
-    Returns:
-      A sequence of twitter.Status instances, one for each reply to the user.
+  def GetReplies(self, since_id=None, max_id=None, page=None):
+    ''' statuses/replies isn't documented by dev.twitter.com anymore.
+        Instead, statuses/mentions is used. As it seems to return the
+        same results, calling GetMentions here.
+        (MAY BREAK existing code, inserted max_id and removed since from
+        parameter list)
     '''
-    url = '%s/statuses/replies.json' % self.base_url
-    if not self._oauth_consumer:
-      raise TwitterError("The twitter.Api instance must be authenticated.")
-    parameters = {}
-    if since:
-      parameters['since'] = since
-    if since_id:
-      parameters['since_id'] = since_id
-    if page:
-      parameters['page'] = page
-    json = self._FetchUrl(url, parameters=parameters)
-    data = simplejson.loads(json)
-    self._CheckForTwitterError(data)
-    return [Status.NewFromJsonDict(x) for x in data]
+    
+    return self.GetMentions(self,
+                     since_id=since_id,
+                     max_id=max_id,
+                     page=page)
 
   def GetRetweets(self, statusid):
     '''Returns up to 100 of the first retweets of the tweet identified
