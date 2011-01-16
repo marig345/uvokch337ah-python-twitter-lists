@@ -3002,6 +3002,19 @@ class Api(object):
     self._CheckForTwitterError(data)
     return User.NewFromJsonDict(data)
 
+  def GetFriendRequests(self, cursor=-1):
+    ''' Returns an array of numeric IDs for every user
+        who has a pending request to follow the authenticating user.
+    '''
+    
+    url = "%s/friendships/incoming.json" % (self.base_url)
+    parameters = {}
+    parameters['cursor'] = cursor
+    json = self._FetchUrl(url, parameters=parameters)
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    return data      
+
   def CreateFavorite(self, status):
     '''Favorites the status specified in the status parameter as the authenticating user.
     Returns the favorite status when successful.
