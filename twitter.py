@@ -2307,7 +2307,7 @@ class Api(object):
         user set in the twitter.Api instance will be used.  [Optional]
       count:
         Specifies the number of statuses to retrieve. May not be
-        greater than 100. [Optional]
+        greater than 200. [Optional]
       page:
          Specifies the page of results to retrieve.
          Note: there are pagination limits. [Optional]
