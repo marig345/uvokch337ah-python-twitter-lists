@@ -2692,13 +2692,13 @@ class Api(object):
     self._CheckForTwitterError(data)
     return [Status.NewFromJsonDict(x) for x in data]
 
-  def GetReplies(self, since_id=None, max_id=None, page=None):
+  def GetReplies(self, since=None, since_id=None, page=None, max_id=None):
     ''' statuses/replies isn't documented by dev.twitter.com anymore.
         Instead, statuses/mentions is used. As it seems to return the
         same results, calling GetMentions here.
-        (MAY BREAK existing code, inserted max_id and removed since from
-        parameter list)
     '''
+
+    # since only in parameter list for backward compatibility!
     
     return self.GetMentions(self,
                      since_id=since_id,
