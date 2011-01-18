@@ -2698,12 +2698,11 @@ class Api(object):
         same results, calling GetMentions here.
     '''
 
-    # since only in parameter list for backward compatibility!
-    
-    return self.GetMentions(self,
-                     since_id=since_id,
-                     max_id=max_id,
-                     page=page)
+    # since only in parameter list for backward compatibility
+
+    return self.GetMentions(since_id=since_id,
+                            max_id=max_id,
+                            page=page)
 
   def GetRetweets(self, statusid):
     '''Returns up to 100 of the first retweets of the tweet identified
