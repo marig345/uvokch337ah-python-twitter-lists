@@ -2703,6 +2703,23 @@ class Api(object):
                             max_id=max_id,
                             page=page)
 
+  def CreateRetweet(self, id):
+    ''' Retweets a tweet. Returns the original tweet with retweet details embedded. '''
+     
+    if not id:
+      raise TwitterError("You must provide an ID of the tweet you want to retweet.")
+    
+    if not self._oauth_consumer:
+      raise TwitterError("The twitter.Api instance must be authenticated.")
+
+    url = '%s/statuses/retweet/%s.json' % (self.base_url, id)
+
+    data = {'id': id}
+    json = self._FetchUrl(url, post_data=data)
+    data = simplejson.loads(json)
+    self._CheckForTwitterError(data)
+    return Status.NewFromJsonDict(data)
+  
   def GetRetweets(self, statusid):
     '''Returns up to 100 of the first retweets of the tweet identified
     by statusid
