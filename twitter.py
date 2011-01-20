@@ -30,7 +30,6 @@ import sys
 import tempfile
 import textwrap
 import time
-import calendar
 import urllib
 import urllib2
 import urlparse
